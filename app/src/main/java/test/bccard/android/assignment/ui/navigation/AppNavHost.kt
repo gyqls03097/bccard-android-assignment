@@ -16,42 +16,50 @@ import test.bccard.android.assignment.ui.viewmodel.AccessKeyViewModel
 import test.bccard.android.assignment.ui.viewmodel.PhotoListViewModel
 
 @Serializable
-data object AccessKeyRoute
+sealed interface Screen {
 
-@Serializable
-data object PhotoListRoute
+    @Serializable
+    data object AccessKey : Screen
+
+    @Serializable
+    data object PhotoList : Screen
+}
 
 @Composable
 fun AppNavHost(
     di: AppDI,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: Any = if (di.pref.accessKey.isEmpty()) AccessKeyRoute else PhotoListRoute,
+    startDestination: Any = if (di.pref.accessKey.isEmpty()) Screen.AccessKey else Screen.PhotoList,
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier.fillMaxSize(),
     ) {
-        composable<AccessKeyRoute> {
+        composable<Screen.AccessKey> {
             val viewModel: AccessKeyViewModel = viewModel {
                 AccessKeyViewModel(saveAccessKey = { accessKey -> di.pref.accessKey = accessKey })
             }
             AccessKeyScreen(
                 viewModel = viewModel,
                 onSaved = {
-                    navController.navigate(PhotoListRoute) {
-                        popUpTo<AccessKeyRoute> { inclusive = true }
+                    navController.navigate(Screen.PhotoList) {
+                        popUpTo<Screen.AccessKey> { inclusive = true }
                     }
                 },
             )
         }
 
-        composable<PhotoListRoute> {
+        composable<Screen.PhotoList> {
             val viewModel: PhotoListViewModel = viewModel {
                 PhotoListViewModel(di.getPhotos)
             }
-            PhotoListScreen(viewModel = viewModel)
+            PhotoListScreen(
+                viewModel = viewModel,
+                onPhotoClick = {},  // todo
+                onLikedListClick = {},  // todo
+            )
         }
     }
 }
