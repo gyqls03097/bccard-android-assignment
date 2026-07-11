@@ -1,4 +1,4 @@
-package test.bccard.android.assignment.ui.navigation
+package test.bccard.android.assignment
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -9,9 +9,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.serialization.Serializable
-import test.bccard.android.assignment.AppDI
-import test.bccard.android.assignment.ui.AccessKeyScreen
-import test.bccard.android.assignment.ui.PhotoListScreen
+import test.bccard.android.assignment.domain.model.Photo
+import test.bccard.android.assignment.ui.screen.AccessKeyScreen
+import test.bccard.android.assignment.ui.screen.FavoriteListScreen
+import test.bccard.android.assignment.ui.screen.PhotoDetailScreen
+import test.bccard.android.assignment.ui.screen.PhotoListScreen
 import test.bccard.android.assignment.ui.viewmodel.AccessKeyViewModel
 import test.bccard.android.assignment.ui.viewmodel.PhotoListViewModel
 
@@ -23,6 +25,18 @@ sealed interface Screen {
 
     @Serializable
     data object PhotoList : Screen
+
+    @Serializable
+    data object FavoriteList : Screen
+
+    @Serializable
+    data class PhotoDetail(val photoId: String) : Screen {
+        companion object {
+            fun create(photo: Photo): PhotoDetail {
+                return PhotoDetail(photo.id)
+            }
+        }
+    }
 }
 
 @Composable
@@ -57,9 +71,17 @@ fun AppNavHost(
             }
             PhotoListScreen(
                 viewModel = viewModel,
-                onPhotoClick = {},  // todo
-                onLikedListClick = {},  // todo
+                onPhotoClick = { photo -> navController.navigate(Screen.PhotoDetail.create(photo)) },
+                onLikedListClick = { navController.navigate(Screen.FavoriteList) },
             )
+        }
+
+        composable<Screen.FavoriteList> {
+            FavoriteListScreen()
+        }
+
+        composable<Screen.PhotoDetail> {
+            PhotoDetailScreen()
         }
     }
 }

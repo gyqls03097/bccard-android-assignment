@@ -1,4 +1,4 @@
-package test.bccard.android.assignment.ui
+package test.bccard.android.assignment.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,7 +48,7 @@ fun AccessKeyScreen(
 }
 
 @Composable
-fun AccessKeyScreenContent(
+private fun AccessKeyScreenContent(
     accessKey: String,
     error: String? = null,
     onAccessKeyChange: (String) -> Unit = {},

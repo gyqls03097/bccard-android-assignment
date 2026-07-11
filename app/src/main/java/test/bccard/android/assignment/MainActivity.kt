@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
-import test.bccard.android.assignment.ui.navigation.AppNavHost
 import test.bccard.android.assignment.ui.theme.BccardTheme
 
 class MainActivity : ComponentActivity() {

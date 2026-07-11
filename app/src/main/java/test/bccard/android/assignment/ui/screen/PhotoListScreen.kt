@@ -1,4 +1,4 @@
-package test.bccard.android.assignment.ui
+package test.bccard.android.assignment.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -68,7 +68,7 @@ fun PhotoListScreen(
 }
 
 @Composable
-fun PhotoListScreenContent(
+private fun PhotoListScreenContent(
     photos: List<Photo>,
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
