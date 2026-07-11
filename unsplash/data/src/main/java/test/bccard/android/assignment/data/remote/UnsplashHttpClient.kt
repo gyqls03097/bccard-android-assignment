@@ -14,7 +14,7 @@ object UnsplashHttpClient {
 
     const val BASE_URL: String = "https://api.unsplash.com"
 
-    fun create(accessKey: String): HttpClient = HttpClient(OkHttp) {
+    fun create(accessKey: () -> String): HttpClient = HttpClient(OkHttp) {
         expectSuccess = true
 
         install(ContentNegotiation) {
@@ -33,7 +33,7 @@ object UnsplashHttpClient {
         }
 
         defaultRequest {
-            header(HttpHeaders.Authorization, "Client-ID $accessKey")
+            header(HttpHeaders.Authorization, "Client-ID ${accessKey()}")
         }
     }
 }
