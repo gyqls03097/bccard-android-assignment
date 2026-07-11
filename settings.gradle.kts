@@ -24,4 +24,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "bccard-android-assignment"
 include(":app")
- 
+include(":unsplash")
+include(":unsplash:domain")
+include(":unsplash:data")
