@@ -1,6 +1,6 @@
 package test.bccard.android.assignment.domain.usecase
 
-import test.bccard.android.assignment.domain.model.Photo
+import test.bccard.android.assignment.core.model.Photo
 import test.bccard.android.assignment.domain.repository.PhotoRepository
 
 class GetPhotosUseCase(private val repository: PhotoRepository) {

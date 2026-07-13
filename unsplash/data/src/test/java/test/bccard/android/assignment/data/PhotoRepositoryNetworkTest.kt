@@ -7,10 +7,10 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import test.bccard.android.assignment.core.model.Photo
 import test.bccard.android.assignment.data.remote.UnsplashApi
 import test.bccard.android.assignment.data.remote.UnsplashHttpClient
 import test.bccard.android.assignment.data.repository.PhotoRepositoryImpl
-import test.bccard.android.assignment.domain.model.Photo
 
 class PhotoRepositoryNetworkTest {
 
@@ -20,7 +20,7 @@ class PhotoRepositoryNetworkTest {
     @Before
     fun setUp() {
         val clientId = ""  // FIXME 개별 아이디 입력 필요
-        client = UnsplashHttpClient.create(clientId)
+        client = UnsplashHttpClient.create({ clientId })
         repository = PhotoRepositoryImpl(UnsplashApi(client))
     }
 

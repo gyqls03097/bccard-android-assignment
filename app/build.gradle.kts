@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core"))
     implementation(project(":unsplash:domain"))
     implementation(project(":unsplash:data"))
 

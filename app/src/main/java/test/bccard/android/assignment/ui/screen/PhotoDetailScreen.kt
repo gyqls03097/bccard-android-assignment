@@ -36,11 +36,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.SubcomposeAsyncImage
 import test.bccard.android.assignment.R
-import test.bccard.android.assignment.domain.model.Photo
+import test.bccard.android.assignment.core.model.Photo
+import test.bccard.android.assignment.core.model.PhotoUser
 import test.bccard.android.assignment.domain.model.PhotoDetail
 import test.bccard.android.assignment.domain.model.PhotoExif
 import test.bccard.android.assignment.domain.model.PhotoLocation
-import test.bccard.android.assignment.domain.model.PhotoUser
 import test.bccard.android.assignment.ui.viewmodel.PhotoDetailViewModel
 
 
