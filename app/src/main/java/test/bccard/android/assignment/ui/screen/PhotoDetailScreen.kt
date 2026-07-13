@@ -27,14 +27,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.SubcomposeAsyncImage
 import test.bccard.android.assignment.R
-import test.bccard.android.assignment.comm.HttpImage
 import test.bccard.android.assignment.domain.model.Photo
 import test.bccard.android.assignment.domain.model.PhotoDetail
 import test.bccard.android.assignment.domain.model.PhotoExif
@@ -148,16 +149,29 @@ private fun PhotoDetailScreenContent(
                         .clickable(onClick = onPhotoClick)
                         .clip(RoundedCornerShape(8.dp))
                 ) {
-                    if (photo.urlDetail == null) {
+                    val urlDetail = photo.urlDetail
+                    if (urlDetail == null) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .background(Color.LightGray)
                         )
                     } else {
-                        HttpImage(
-                            modifier = Modifier.fillMaxSize(),
-                            url = photo.urlDetail ?: ""
+                        SubcomposeAsyncImage(
+                            model = urlDetail.takeIf { it.isNotBlank() },
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.LightGray),
+                            contentScale = ContentScale.Crop,
+                            loading = {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            },
                         )
                     }
                 }
@@ -289,16 +303,29 @@ private fun PhotoUserItem(
                 .size(40.dp)
                 .clip(RoundedCornerShape(20.dp)),
         ) {
-            if (user.profileImageUrl == null) {
+            val profileImageUrl = user.profileImageUrl
+            if (profileImageUrl == null) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color.LightGray)
                 )
             } else {
-                HttpImage(
-                    modifier = Modifier.fillMaxSize(),
-                    url = user.profileImageUrl ?: ""
+                SubcomposeAsyncImage(
+                    model = profileImageUrl.takeIf { it.isNotBlank() },
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.LightGray),
+                    contentScale = ContentScale.Crop,
+                    loading = {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    },
                 )
             }
         }
