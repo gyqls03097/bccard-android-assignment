@@ -39,7 +39,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":comm"))
     implementation(project(":unsplash:domain"))
     implementation(project(":unsplash:data"))
 
@@ -56,6 +55,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.ktor.client.core)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.telephoto.zoomable.image.coil3)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

@@ -16,7 +16,8 @@ fun PhotoDto.toDomain(): Photo = Photo(
     user = user?.toDomain(),
     width = width ?: 0,
     height = height ?: 0,
-    url = urls?.let { it.regular ?: it.small ?: it.full ?: it.thumb ?: it.raw }
+    url = urls?.let { it.regular ?: it.small ?: it.full ?: it.thumb ?: it.raw },
+    urlDetail = urls?.let { it.raw ?: it.full ?: it.regular ?: it.small ?: it.thumb },
 )
 
 fun PhotoDetailDto.toDomain(): PhotoDetail = PhotoDetail(

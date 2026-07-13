@@ -6,6 +6,7 @@ data class Photo(
     val width: Int = 0,
     val height: Int = 0,
     val url: String? = null,
+    val urlDetail: String? = null
 )
 
 data class PhotoUser(

@@ -31,14 +31,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.SubcomposeAsyncImage
 import test.bccard.android.assignment.R
-import test.bccard.android.assignment.comm.HttpImage
 import test.bccard.android.assignment.domain.model.Photo
 import test.bccard.android.assignment.domain.model.PhotoUser
 import test.bccard.android.assignment.ui.viewmodel.PhotoListViewModel
@@ -134,7 +135,8 @@ private fun PhotoListScreenContent(
         LazyColumn(
             state = listState,
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .weight(1.0f)
                 .background(Color(0xfff5f5f5)),
             contentPadding = PaddingValues(12.dp),
         ) {
@@ -207,9 +209,21 @@ private fun PhotoListItem(
                 .aspectRatio(1.8f),
             contentAlignment = Alignment.Center,
         ) {
-            HttpImage(
-                modifier = Modifier.fillMaxSize(),
-                url = imageUrl
+            SubcomposeAsyncImage(
+                model = imageUrl.takeIf { it.isNotBlank() },
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.LightGray),
+                contentScale = ContentScale.Crop,
+                loading = {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                },
             )
             Text(
                 modifier = Modifier

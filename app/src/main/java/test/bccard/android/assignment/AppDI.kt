@@ -6,6 +6,7 @@ import test.bccard.android.assignment.data.remote.UnsplashApi
 import test.bccard.android.assignment.data.remote.UnsplashHttpClient
 import test.bccard.android.assignment.data.repository.PhotoRepositoryImpl
 import test.bccard.android.assignment.domain.repository.PhotoRepository
+import test.bccard.android.assignment.domain.usecase.GetPhotoDetailUseCase
 import test.bccard.android.assignment.domain.usecase.GetPhotosUseCase
 
 class AppDI(context: Context) {
@@ -17,4 +18,6 @@ class AppDI(context: Context) {
     private val photoRepository: PhotoRepository = PhotoRepositoryImpl(UnsplashApi(httpClient))
 
     val getPhotos = GetPhotosUseCase(photoRepository)
+
+    val getPhotoDetail = GetPhotoDetailUseCase(photoRepository)
 }
