@@ -1,5 +1,6 @@
 package test.bccard.android.assignment
 
+import android.util.Base64
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,6 +16,7 @@ import test.bccard.android.assignment.domain.model.PhotoUser
 import test.bccard.android.assignment.ui.screen.AccessKeyScreen
 import test.bccard.android.assignment.ui.screen.FavoriteListScreen
 import test.bccard.android.assignment.ui.screen.PhotoDetailScreen
+import test.bccard.android.assignment.ui.screen.PhotoExpandScreen
 import test.bccard.android.assignment.ui.screen.PhotoListScreen
 import test.bccard.android.assignment.ui.viewmodel.AccessKeyViewModel
 import test.bccard.android.assignment.ui.viewmodel.PhotoDetailViewModel
@@ -31,6 +33,22 @@ sealed interface Screen {
 
     @Serializable
     data object FavoriteList : Screen
+
+    @Serializable
+    data class PhotoExpand(val base64Url: String) : Screen {
+
+        fun getUrl(): String {
+            val arr = Base64.decode(base64Url, Base64.URL_SAFE or Base64.NO_WRAP)
+            return arr.toString(Charsets.UTF_8)
+        }
+
+        companion object {
+            fun create(url: String): PhotoExpand {
+                val arr = url.toByteArray(Charsets.UTF_8)
+                return PhotoExpand(Base64.encodeToString(arr, Base64.URL_SAFE or Base64.NO_WRAP))
+            }
+        }
+    }
 
     @Serializable
     data class PhotoDetail(
@@ -123,7 +141,16 @@ fun AppNavHost(
             PhotoDetailScreen(
                 photo = route.toPhoto(),
                 viewModel = viewModel,
+                onPhotoClick = { url -> navController.navigate(Screen.PhotoExpand.create(url)) },
                 onBackClick = { navController.popBackStack() },
+            )
+        }
+
+        composable<Screen.PhotoExpand> { backStackEntry ->
+            val route: Screen.PhotoExpand = backStackEntry.toRoute()
+            PhotoExpandScreen(
+                url = route.getUrl(),
+                onBackClick = { navController.popBackStack() }
             )
         }
     }

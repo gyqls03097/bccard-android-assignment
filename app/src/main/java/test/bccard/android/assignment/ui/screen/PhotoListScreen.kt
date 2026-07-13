@@ -134,7 +134,8 @@ private fun PhotoListScreenContent(
         LazyColumn(
             state = listState,
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .weight(1.0f)
                 .background(Color(0xfff5f5f5)),
             contentPadding = PaddingValues(12.dp),
         ) {

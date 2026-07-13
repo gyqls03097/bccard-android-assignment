@@ -1,6 +1,7 @@
 package test.bccard.android.assignment.ui.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,6 +48,7 @@ fun PhotoDetailScreen(
     photo: Photo,
     viewModel: PhotoDetailViewModel,
     modifier: Modifier = Modifier,
+    onPhotoClick: (String) -> Unit = {},
     onBackClick: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -60,6 +62,7 @@ fun PhotoDetailScreen(
         error = uiState.error,
         isLocationDraw = viewModel::isPhotoLocationDraw,
         isExifDraw = viewModel::isPhotoExifDraw,
+        onPhotoClick = { photo.urlDetail?.let { url -> onPhotoClick(url) } },
         onBackClick = onBackClick,
         onLikeClick = viewModel::toggleLike,
     )
@@ -75,6 +78,7 @@ private fun PhotoDetailScreenContent(
     error: String? = null,
     isLocationDraw: (PhotoLocation?) -> Boolean = { true },
     isExifDraw: (PhotoExif?) -> Boolean = { true },
+    onPhotoClick: () -> Unit = {},
     onBackClick: () -> Unit = {},
     onLikeClick: () -> Unit = {},
 ) {
@@ -129,13 +133,19 @@ private fun PhotoDetailScreenContent(
             )
         }
 
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1.0f)
+        ) {
+
             item {
                 Box(
                     modifier = Modifier
                         .padding(12.dp)
                         .fillMaxWidth()
                         .aspectRatio((photo.width.toFloat() / photo.height.toFloat()))
+                        .clickable(onClick = onPhotoClick)
                         .clip(RoundedCornerShape(8.dp))
                 ) {
                     if (photo.urlDetail == null) {
