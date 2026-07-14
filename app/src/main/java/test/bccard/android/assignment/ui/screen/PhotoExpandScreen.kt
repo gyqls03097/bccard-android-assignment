@@ -56,12 +56,11 @@ private fun PhotoExpandScreenContent(
             IconButton(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .padding(start = 20.dp),
+                    .padding(start = 8.dp),
                 onClick = onBackClick
             ) {
                 Icon(
                     painter = painterResource(R.drawable.icon_back),
-                    modifier = Modifier.align(Alignment.Center),
                     contentDescription = null,
                     tint = Color.White
                 )

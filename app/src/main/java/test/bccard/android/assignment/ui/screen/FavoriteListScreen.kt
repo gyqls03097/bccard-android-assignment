@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -74,43 +75,43 @@ private fun FavoriteListScreenContent(
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
         ) {
             IconButton(
                 modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 20.dp),
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 8.dp),
                 onClick = onBackClick
             ) {
                 Icon(
                     painter = painterResource(R.drawable.icon_back),
-                    modifier = Modifier.align(Alignment.Center),
                     contentDescription = null,
                     tint = Color.Black
                 )
             }
             Text(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(top = 20.dp, bottom = 20.dp),
+                    .weight(1.0f)
+                    .padding(start = 8.dp, top = 20.dp, bottom = 20.dp),
                 text = "Favorites",
                 fontSize = 20.sp
             )
-            Box(
-                modifier = Modifier
-                    .height(1.dp)
-                    .fillMaxWidth()
-                    .background(Color.LightGray)
-                    .align(Alignment.BottomCenter)
-            )
         }
+        Box(
+            modifier = Modifier
+                .height(1.dp)
+                .fillMaxWidth()
+                .background(Color.LightGray)
+        )
 
         if (favorites.isEmpty()) {
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1.0f),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
@@ -122,7 +123,7 @@ private fun FavoriteListScreenContent(
         } else {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .weight(1.0f)
                     .background(Color(0xfff5f5f5)),
                 contentPadding = PaddingValues(12.dp),
             ) {

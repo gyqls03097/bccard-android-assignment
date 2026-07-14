@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -99,39 +100,38 @@ private fun PhotoListScreenContent(
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
         ) {
             Text(
                 modifier = Modifier
-                    .align(Alignment.CenterStart)
+                    .align(Alignment.CenterVertically)
+                    .weight(1.0f)
                     .padding(start = 20.dp, top = 20.dp, bottom = 20.dp),
                 text = "Unsplash Images",
                 fontSize = 20.sp
             )
             IconButton(
                 modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(end = 20.dp),
+                    .align(Alignment.CenterVertically)
+                    .padding(end = 8.dp),
                 onClick = onLikedListClick
             ) {
                 Icon(
                     painter = painterResource(R.drawable.icon_heart),
-                    modifier = Modifier.align(Alignment.Center),
                     contentDescription = null,
                     tint = Color.Red
                 )
             }
-            Box(
-                modifier = Modifier
-                    .height(1.dp)
-                    .fillMaxWidth()
-                    .background(Color.LightGray)
-                    .align(Alignment.BottomCenter)
-            )
         }
+        Box(
+            modifier = Modifier
+                .height(1.dp)
+                .fillMaxWidth()
+                .background(Color.LightGray)
+        )
         LazyColumn(
             state = listState,
             modifier = Modifier
