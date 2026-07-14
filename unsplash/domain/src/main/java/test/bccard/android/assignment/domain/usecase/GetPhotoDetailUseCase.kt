@@ -5,5 +5,7 @@ import test.bccard.android.assignment.domain.repository.PhotoRepository
 
 class GetPhotoDetailUseCase(private val repository: PhotoRepository) {
 
-    suspend operator fun invoke(id: String): Result<PhotoDetail> = repository.getPhotoDetails(id)
+    suspend operator fun invoke(id: String): Result<PhotoDetail> {
+        return repository.getPhotoDetails(id)
+    }
 }

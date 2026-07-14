@@ -1,6 +1,6 @@
 package test.bccard.android.assignment.domain.repository
 
-import test.bccard.android.assignment.core.model.Photo
+import test.bccard.android.assignment.core.domain.model.Photo
 import test.bccard.android.assignment.domain.model.PhotoDetail
 
 interface PhotoRepository {

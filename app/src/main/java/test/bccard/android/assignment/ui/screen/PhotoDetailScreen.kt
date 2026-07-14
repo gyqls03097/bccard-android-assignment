@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.SubcomposeAsyncImage
 import test.bccard.android.assignment.R
-import test.bccard.android.assignment.core.model.Photo
-import test.bccard.android.assignment.core.model.PhotoUser
+import test.bccard.android.assignment.core.domain.model.Photo
+import test.bccard.android.assignment.core.domain.model.PhotoUser
 import test.bccard.android.assignment.domain.model.PhotoDetail
 import test.bccard.android.assignment.domain.model.PhotoExif
 import test.bccard.android.assignment.domain.model.PhotoLocation
@@ -66,6 +66,7 @@ fun PhotoDetailScreen(
         onPhotoClick = { photo.urlDetail?.let { url -> onPhotoClick(url) } },
         onBackClick = onBackClick,
         onLikeClick = viewModel::toggleLike,
+        onDownloadClick = viewModel::download,
     )
 }
 
@@ -82,57 +83,67 @@ private fun PhotoDetailScreenContent(
     onPhotoClick: () -> Unit = {},
     onBackClick: () -> Unit = {},
     onLikeClick: () -> Unit = {},
+    onDownloadClick: () -> Unit = {},
 ) {
 
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
         ) {
             IconButton(
                 modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 20.dp),
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 8.dp),
                 onClick = onBackClick
             ) {
                 Icon(
                     painter = painterResource(R.drawable.icon_back),
-                    modifier = Modifier.align(Alignment.Center),
                     contentDescription = null,
                     tint = Color.Black
                 )
             }
             Text(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(start = 20.dp, top = 20.dp, bottom = 20.dp),
-                text = "Unsplash Images",
+                    .weight(1.0f)
+                    .padding(start = 8.dp, top = 20.dp, bottom = 20.dp),
+                text = "Photo Details",
                 fontSize = 20.sp
             )
             IconButton(
+                onClick = onDownloadClick,
                 modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(end = 20.dp),
-                onClick = onLikeClick
+                    .align(Alignment.CenterVertically),
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.icon_download),
+                    contentDescription = null,
+                    tint = Color.Black
+                )
+            }
+            IconButton(
+                onClick = onLikeClick,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(end = 8.dp),
             ) {
                 Icon(
                     painter = painterResource(R.drawable.icon_heart),
-                    modifier = Modifier.align(Alignment.Center),
                     contentDescription = null,
                     tint = if (isLiked) Color.Red else Color.Gray
                 )
             }
-            Box(
-                modifier = Modifier
-                    .height(1.dp)
-                    .fillMaxWidth()
-                    .background(Color.LightGray)
-                    .align(Alignment.BottomCenter)
-            )
         }
+
+        Box(
+            modifier = Modifier
+                .height(1.dp)
+                .fillMaxWidth()
+                .background(Color.LightGray)
+        )
 
         LazyColumn(
             modifier = Modifier

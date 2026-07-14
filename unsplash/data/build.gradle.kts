@@ -29,6 +29,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":core:domain"))
     implementation(project(":unsplash:domain"))
 
     implementation(libs.kotlinx.coroutines.core)

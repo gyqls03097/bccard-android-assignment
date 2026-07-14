@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "test.bccard.android.assignment.favorite.domain"
+    namespace = "test.bccard.android.assignment.core.domain"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -20,10 +20,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":core:domain"))
 
-    implementation(libs.kotlinx.coroutines.core)
+    implementation(project(":core"))
 
     testImplementation(libs.junit)
 }

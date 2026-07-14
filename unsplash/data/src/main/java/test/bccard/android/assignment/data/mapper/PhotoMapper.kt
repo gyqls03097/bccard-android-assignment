@@ -1,7 +1,7 @@
 package test.bccard.android.assignment.data.mapper
 
-import test.bccard.android.assignment.core.model.Photo
-import test.bccard.android.assignment.core.model.PhotoUser
+import test.bccard.android.assignment.core.domain.model.Photo
+import test.bccard.android.assignment.core.domain.model.PhotoUser
 import test.bccard.android.assignment.data.remote.dto.PhotoDetailDto
 import test.bccard.android.assignment.data.remote.dto.PhotoDetailExifDto
 import test.bccard.android.assignment.data.remote.dto.PhotoDetailLocationDto
