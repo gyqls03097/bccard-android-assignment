@@ -1,20 +1,15 @@
-package test.bccard.android.assignment.data.remote
+package test.bccard.android.assignment.core.remote
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.request.header
-import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-object UnsplashHttpClient {
+object DefaultHttpClient {
 
-    const val BASE_URL: String = "https://api.unsplash.com"
-
-    fun create(accessKey: () -> String): HttpClient = HttpClient(OkHttp) {
+    fun create(): HttpClient = HttpClient(OkHttp) {
         expectSuccess = true
 
         install(ContentNegotiation) {
@@ -30,10 +25,6 @@ object UnsplashHttpClient {
             requestTimeoutMillis = 15_000
             connectTimeoutMillis = 15_000
             socketTimeoutMillis = 15_000
-        }
-
-        defaultRequest {
-            header(HttpHeaders.Authorization, "Client-ID ${accessKey()}")
         }
     }
 }

@@ -1,8 +1,8 @@
 package test.bccard.android.assignment.data.repository
 
+import test.bccard.android.assignment.core.model.Photo
 import test.bccard.android.assignment.data.mapper.toDomain
 import test.bccard.android.assignment.data.remote.UnsplashApi
-import test.bccard.android.assignment.domain.model.Photo
 import test.bccard.android.assignment.domain.model.PhotoDetail
 import test.bccard.android.assignment.domain.repository.PhotoRepository
 

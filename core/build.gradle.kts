@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "test.bccard.android.assignment.domain"
+    namespace = "test.bccard.android.assignment.core"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -12,8 +12,6 @@ android {
 
     defaultConfig {
         minSdk = 24
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -22,9 +20,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
 
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
 
     testImplementation(libs.junit)
 }

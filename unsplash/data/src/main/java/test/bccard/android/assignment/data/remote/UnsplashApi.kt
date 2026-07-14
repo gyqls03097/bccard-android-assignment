@@ -3,28 +3,36 @@ package test.bccard.android.assignment.data.remote
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.request.parameter
+import io.ktor.http.HttpHeaders
 import test.bccard.android.assignment.data.remote.dto.DownloadLinkDto
 import test.bccard.android.assignment.data.remote.dto.PhotoDetailDto
 import test.bccard.android.assignment.data.remote.dto.PhotoDto
 
 class UnsplashApi(
     private val client: HttpClient,
-    private val baseUrl: String = UnsplashHttpClient.BASE_URL,
+    private val accessKey: () -> String = { "" },
+    private val baseUrl: String = "https://api.unsplash.com",
 ) {
 
     suspend fun getPhotos(page: Int): Result<List<PhotoDto>> = runCatchingApi {
         client.get("$baseUrl/photos") {
+            header(HttpHeaders.Authorization, "Client-ID ${accessKey()}")
             parameter("page", page)
         }.body()
     }
 
     suspend fun getPhoto(id: String): Result<PhotoDetailDto> = runCatchingApi {
-        client.get("$baseUrl/photos/$id").body()
+        client.get("$baseUrl/photos/$id") {
+            header(HttpHeaders.Authorization, "Client-ID ${accessKey()}")
+        }.body()
     }
 
     suspend fun getDownloadLink(id: String): Result<DownloadLinkDto> = runCatchingApi {
-        client.get("$baseUrl/photos/$id/download").body()
+        client.get("$baseUrl/photos/$id/download") {
+            header(HttpHeaders.Authorization, "Client-ID ${accessKey()}")
+        }.body()
     }
 
     private inline fun <T> runCatchingApi(block: () -> T): Result<T> = try {

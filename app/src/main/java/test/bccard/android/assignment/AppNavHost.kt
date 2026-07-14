@@ -11,14 +11,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
-import test.bccard.android.assignment.domain.model.Photo
-import test.bccard.android.assignment.domain.model.PhotoUser
+import test.bccard.android.assignment.core.model.Photo
+import test.bccard.android.assignment.core.model.PhotoUser
 import test.bccard.android.assignment.ui.screen.AccessKeyScreen
 import test.bccard.android.assignment.ui.screen.FavoriteListScreen
 import test.bccard.android.assignment.ui.screen.PhotoDetailScreen
 import test.bccard.android.assignment.ui.screen.PhotoExpandScreen
 import test.bccard.android.assignment.ui.screen.PhotoListScreen
 import test.bccard.android.assignment.ui.viewmodel.AccessKeyViewModel
+import test.bccard.android.assignment.ui.viewmodel.FavoriteListViewModel
 import test.bccard.android.assignment.ui.viewmodel.PhotoDetailViewModel
 import test.bccard.android.assignment.ui.viewmodel.PhotoListViewModel
 
@@ -120,7 +121,10 @@ fun AppNavHost(
 
         composable<Screen.PhotoList> {
             val viewModel: PhotoListViewModel = viewModel {
-                PhotoListViewModel(di.getPhotos)
+                PhotoListViewModel(
+                    getPhotos = di.getPhotos,
+                    favoriteRepository = di.favoriteRepository,
+                )
             }
             PhotoListScreen(
                 viewModel = viewModel,
@@ -130,13 +134,24 @@ fun AppNavHost(
         }
 
         composable<Screen.FavoriteList> {
-            FavoriteListScreen()
+            val viewModel: FavoriteListViewModel = viewModel {
+                FavoriteListViewModel(favoriteRepository = di.favoriteRepository)
+            }
+            FavoriteListScreen(
+                viewModel = viewModel,
+                onPhotoClick = { photo -> navController.navigate(Screen.PhotoDetail.create(photo)) },
+                onBackClick = { navController.popBackStack() },
+            )
         }
 
         composable<Screen.PhotoDetail> { backStackEntry ->
             val route: Screen.PhotoDetail = backStackEntry.toRoute()
             val viewModel: PhotoDetailViewModel = viewModel {
-                PhotoDetailViewModel(route.photoId, di.getPhotoDetail)
+                PhotoDetailViewModel(
+                    photo = route.toPhoto(),
+                    getPhotoDetail = di.getPhotoDetail,
+                    favoriteRepository = di.favoriteRepository,
+                )
             }
             PhotoDetailScreen(
                 photo = route.toPhoto(),

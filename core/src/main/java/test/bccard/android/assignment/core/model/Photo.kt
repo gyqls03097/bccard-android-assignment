@@ -1,4 +1,4 @@
-package test.bccard.android.assignment.domain.model
+package test.bccard.android.assignment.core.model
 
 data class Photo(
     val id: String = "",

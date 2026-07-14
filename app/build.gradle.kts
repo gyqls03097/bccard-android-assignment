@@ -39,8 +39,11 @@ android {
 }
 
 dependencies {
+    implementation(project(":core"))
     implementation(project(":unsplash:domain"))
     implementation(project(":unsplash:data"))
+    implementation(project(":favorite:domain"))
+    implementation(project(":favorite:data"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
