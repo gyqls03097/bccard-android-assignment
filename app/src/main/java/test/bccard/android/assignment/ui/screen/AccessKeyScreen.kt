@@ -1,5 +1,6 @@
 package test.bccard.android.assignment.ui.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -57,6 +58,7 @@ private fun AccessKeyScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Color.White)
             .statusBarsPadding()
             .navigationBarsPadding()
             .imePadding()

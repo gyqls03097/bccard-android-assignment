@@ -87,7 +87,9 @@ private fun PhotoDetailScreenContent(
 ) {
 
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.White),
     ) {
         Row(
             modifier = Modifier

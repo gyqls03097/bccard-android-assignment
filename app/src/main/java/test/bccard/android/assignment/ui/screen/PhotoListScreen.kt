@@ -98,7 +98,9 @@ private fun PhotoListScreenContent(
     }
 
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .background(Color.White)
+            .fillMaxSize(),
     ) {
         Row(
             modifier = Modifier

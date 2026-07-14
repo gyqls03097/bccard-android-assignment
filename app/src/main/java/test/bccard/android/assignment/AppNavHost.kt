@@ -1,10 +1,20 @@
 package test.bccard.android.assignment
 
 import android.util.Base64
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -134,7 +144,7 @@ fun AppNavHost(
             )
         }
 
-        composable<Screen.FavoriteList> {
+        baseComposable<Screen.FavoriteList> {
             val viewModel: FavoriteListViewModel = viewModel {
                 FavoriteListViewModel(
                     favoriteRepository = di.favoriteRepository,
@@ -148,7 +158,7 @@ fun AppNavHost(
             )
         }
 
-        composable<Screen.PhotoDetail> { backStackEntry ->
+        baseComposable<Screen.PhotoDetail> { backStackEntry ->
             val route: Screen.PhotoDetail = backStackEntry.toRoute()
             val viewModel: PhotoDetailViewModel = viewModel {
                 PhotoDetailViewModel(
@@ -167,7 +177,7 @@ fun AppNavHost(
             )
         }
 
-        composable<Screen.PhotoExpand> { backStackEntry ->
+        baseComposable<Screen.PhotoExpand> { backStackEntry ->
             val route: Screen.PhotoExpand = backStackEntry.toRoute()
             PhotoExpandScreen(
                 url = route.getUrl(),
@@ -176,3 +186,63 @@ fun AppNavHost(
         }
     }
 }
+
+private inline fun <reified T : Any> NavGraphBuilder.baseComposable(
+    noinline content: @Composable (NavBackStackEntry) -> Unit
+) {
+    composable<T>(
+        enterTransition = { baseSlideIn() },
+        exitTransition = { baseSlideOut(-0.25f) + baseFadeOut(0.3f) },
+        popExitTransition = { baseSlideOut() },
+        popEnterTransition = { baseSlideIn(-0.25f) + baseFadeIn(0.3f) },
+    ) { backStackEntry ->
+        content(backStackEntry)
+    }
+}
+
+private const val AnimDuration = 400
+
+private fun baseSlideIn(
+    initOffset: Float = 1f,
+): EnterTransition = slideInHorizontally(
+    initialOffsetX = { (it * initOffset).toInt() },
+    animationSpec = tween(
+        durationMillis = AnimDuration,
+        delayMillis = 0,
+        easing = FastOutSlowInEasing
+    ),
+)
+
+private fun baseSlideOut(
+    targetOffset: Float = 1f,
+): ExitTransition = slideOutHorizontally(
+    targetOffsetX = { (it * targetOffset).toInt() },
+    animationSpec = tween(
+        durationMillis = AnimDuration,
+        delayMillis = 0,
+        easing = FastOutSlowInEasing
+    ),
+)
+
+private fun baseFadeOut(
+    targetAlpha: Float = 0f,
+): ExitTransition = fadeOut(
+    targetAlpha = targetAlpha,
+    animationSpec = tween(
+        durationMillis = AnimDuration,
+        delayMillis = 0,
+        easing = FastOutSlowInEasing
+    ),
+)
+
+private fun baseFadeIn(
+    initAlpha: Float = 0f,
+): EnterTransition = fadeIn(
+    initialAlpha = initAlpha,
+    animationSpec = tween(
+        durationMillis = AnimDuration,
+        delayMillis = 0,
+        easing = FastOutSlowInEasing
+    ),
+)
+

@@ -158,6 +158,7 @@ private fun FavoriteListItem(
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .background(Color.White)
             .clip(RoundedCornerShape(12.dp))
             .clickable(onClick = onClick),
     ) {
