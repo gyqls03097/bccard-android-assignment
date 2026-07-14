@@ -41,6 +41,7 @@ import test.bccard.android.assignment.R
 import test.bccard.android.assignment.core.domain.model.Photo
 import test.bccard.android.assignment.core.domain.model.PhotoUser
 import test.bccard.android.assignment.favorite.domain.model.FavoritePhoto
+import test.bccard.android.assignment.ui.composables.ProfileImage
 import test.bccard.android.assignment.ui.viewmodel.FavoriteListViewModel
 
 
@@ -183,16 +184,32 @@ private fun FavoriteListItem(
                     )
                 },
             )
-            Text(
+            Row(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
-                    .padding(start = 12.dp, bottom = 12.dp),
-                text = photo.user?.name ?: photo.id,
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+                    .padding(all = 8.dp)
+                    .background(
+                        color = Color(0x77000000),
+                        shape = RoundedCornerShape(20.dp)
+                    )
+                    .padding(all = 8.dp)
+            ) {
+                ProfileImage(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    profileImageUrl = photo.user?.profileImageUrl,
+                    size = 20.dp
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .align(Alignment.CenterVertically),
+                    text = photo.user?.name ?: photo.id,
+                    fontSize = 14.sp,
+                    color = Color.White,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
             IconButton(
                 modifier = Modifier.align(Alignment.TopEnd),
                 onClick = onToggleLike,
