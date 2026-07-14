@@ -11,8 +11,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
-import test.bccard.android.assignment.core.model.Photo
-import test.bccard.android.assignment.core.model.PhotoUser
+import test.bccard.android.assignment.core.domain.model.Photo
+import test.bccard.android.assignment.core.domain.model.PhotoUser
 import test.bccard.android.assignment.ui.screen.AccessKeyScreen
 import test.bccard.android.assignment.ui.screen.FavoriteListScreen
 import test.bccard.android.assignment.ui.screen.PhotoDetailScreen
@@ -150,6 +150,7 @@ fun AppNavHost(
                 PhotoDetailViewModel(
                     photo = route.toPhoto(),
                     getPhotoDetail = di.getPhotoDetail,
+                    downloadPhoto = di.downloadPhoto,
                     favoriteRepository = di.favoriteRepository,
                 )
             }

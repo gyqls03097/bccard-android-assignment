@@ -6,7 +6,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import test.bccard.android.assignment.core.model.Photo
+import test.bccard.android.assignment.core.domain.model.Photo
 import test.bccard.android.assignment.favorite.data.local.FavoriteDao
 import test.bccard.android.assignment.favorite.data.local.FavoriteDatabase
 import test.bccard.android.assignment.favorite.data.local.FavoriteImageEntity

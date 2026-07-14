@@ -22,6 +22,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":core:domain"))
     implementation(project(":favorite:domain"))
 
     implementation(libs.androidx.room.runtime)

@@ -40,6 +40,8 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:data"))
     implementation(project(":unsplash:domain"))
     implementation(project(":unsplash:data"))
     implementation(project(":favorite:domain"))

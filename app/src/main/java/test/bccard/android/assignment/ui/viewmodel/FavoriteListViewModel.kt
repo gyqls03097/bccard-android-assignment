@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import test.bccard.android.assignment.core.model.Photo
+import test.bccard.android.assignment.core.domain.model.Photo
 import test.bccard.android.assignment.favorite.domain.model.FavoritePhoto
 import test.bccard.android.assignment.favorite.domain.repository.FavoriteRepository
 

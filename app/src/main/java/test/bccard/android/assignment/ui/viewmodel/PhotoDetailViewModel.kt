@@ -7,10 +7,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import test.bccard.android.assignment.core.model.Photo
+import test.bccard.android.assignment.core.domain.model.Photo
 import test.bccard.android.assignment.domain.model.PhotoDetail
 import test.bccard.android.assignment.domain.model.PhotoExif
 import test.bccard.android.assignment.domain.model.PhotoLocation
+import test.bccard.android.assignment.domain.usecase.DownloadPhotoUseCase
 import test.bccard.android.assignment.domain.usecase.GetPhotoDetailUseCase
 import test.bccard.android.assignment.favorite.domain.repository.FavoriteRepository
 
@@ -24,6 +25,7 @@ data class PhotoDetailUiState(
 class PhotoDetailViewModel(
     private val photo: Photo,
     private val getPhotoDetail: GetPhotoDetailUseCase,
+    private val downloadPhoto: DownloadPhotoUseCase,
     private val favoriteRepository: FavoriteRepository,
 ) : ViewModel() {
 
@@ -59,6 +61,13 @@ class PhotoDetailViewModel(
                         )
                     }
                 }
+        }
+    }
+
+    fun download() {
+        viewModelScope.launch {
+            downloadPhoto(photo.id)
+                .onFailure { _uiState.update { it.copy(error = "다운로드 요청 실패") } }
         }
     }
 

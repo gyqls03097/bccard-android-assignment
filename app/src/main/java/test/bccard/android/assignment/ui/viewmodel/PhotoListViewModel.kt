@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import test.bccard.android.assignment.core.model.Photo
+import test.bccard.android.assignment.core.domain.model.Photo
 import test.bccard.android.assignment.domain.usecase.GetPhotosUseCase
 import test.bccard.android.assignment.favorite.domain.repository.FavoriteRepository
 

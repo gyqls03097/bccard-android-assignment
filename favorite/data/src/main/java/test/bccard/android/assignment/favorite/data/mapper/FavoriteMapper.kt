@@ -1,7 +1,7 @@
 package test.bccard.android.assignment.favorite.data.mapper
 
-import test.bccard.android.assignment.core.model.Photo
-import test.bccard.android.assignment.core.model.PhotoUser
+import test.bccard.android.assignment.core.domain.model.Photo
+import test.bccard.android.assignment.core.domain.model.PhotoUser
 import test.bccard.android.assignment.favorite.data.local.FavoriteEntity
 import test.bccard.android.assignment.favorite.domain.model.FavoritePhoto
 
