@@ -19,6 +19,7 @@ import test.bccard.android.assignment.ui.screen.PhotoDetailScreen
 import test.bccard.android.assignment.ui.screen.PhotoExpandScreen
 import test.bccard.android.assignment.ui.screen.PhotoListScreen
 import test.bccard.android.assignment.ui.viewmodel.AccessKeyViewModel
+import test.bccard.android.assignment.ui.viewmodel.FavoriteListViewModel
 import test.bccard.android.assignment.ui.viewmodel.PhotoDetailViewModel
 import test.bccard.android.assignment.ui.viewmodel.PhotoListViewModel
 
@@ -120,7 +121,10 @@ fun AppNavHost(
 
         composable<Screen.PhotoList> {
             val viewModel: PhotoListViewModel = viewModel {
-                PhotoListViewModel(di.getPhotos)
+                PhotoListViewModel(
+                    getPhotos = di.getPhotos,
+                    favoriteRepository = di.favoriteRepository,
+                )
             }
             PhotoListScreen(
                 viewModel = viewModel,
@@ -130,13 +134,24 @@ fun AppNavHost(
         }
 
         composable<Screen.FavoriteList> {
-            FavoriteListScreen()
+            val viewModel: FavoriteListViewModel = viewModel {
+                FavoriteListViewModel(favoriteRepository = di.favoriteRepository)
+            }
+            FavoriteListScreen(
+                viewModel = viewModel,
+                onPhotoClick = { photo -> navController.navigate(Screen.PhotoDetail.create(photo)) },
+                onBackClick = { navController.popBackStack() },
+            )
         }
 
         composable<Screen.PhotoDetail> { backStackEntry ->
             val route: Screen.PhotoDetail = backStackEntry.toRoute()
             val viewModel: PhotoDetailViewModel = viewModel {
-                PhotoDetailViewModel(route.photoId, di.getPhotoDetail)
+                PhotoDetailViewModel(
+                    photo = route.toPhoto(),
+                    getPhotoDetail = di.getPhotoDetail,
+                    favoriteRepository = di.favoriteRepository,
+                )
             }
             PhotoDetailScreen(
                 photo = route.toPhoto(),

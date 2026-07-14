@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import test.bccard.android.assignment.core.model.Photo
 import test.bccard.android.assignment.domain.usecase.GetPhotosUseCase
+import test.bccard.android.assignment.favorite.domain.repository.FavoriteRepository
 
 data class PhotoListUiState(
     val photos: List<Photo> = emptyList(),
@@ -20,6 +21,7 @@ data class PhotoListUiState(
 
 class PhotoListViewModel(
     private val getPhotos: GetPhotosUseCase,
+    private val favoriteRepository: FavoriteRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PhotoListUiState())
@@ -31,6 +33,11 @@ class PhotoListViewModel(
 
     init {
         loadNextPage()
+        viewModelScope.launch {
+            favoriteRepository.findIdAll().collect { ids ->
+                _uiState.update { it.copy(likedIds = ids) }
+            }
+        }
     }
 
     fun loadNextPage() {
@@ -76,6 +83,8 @@ class PhotoListViewModel(
     }
 
     fun toggleLike(photo: Photo) {
-        // todo db 추가 후 구현
+        viewModelScope.launch {
+            favoriteRepository.toggleFavorite(photo)
+        }
     }
 }

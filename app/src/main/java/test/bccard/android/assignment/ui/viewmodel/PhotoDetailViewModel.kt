@@ -7,10 +7,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import test.bccard.android.assignment.core.model.Photo
 import test.bccard.android.assignment.domain.model.PhotoDetail
 import test.bccard.android.assignment.domain.model.PhotoExif
 import test.bccard.android.assignment.domain.model.PhotoLocation
 import test.bccard.android.assignment.domain.usecase.GetPhotoDetailUseCase
+import test.bccard.android.assignment.favorite.domain.repository.FavoriteRepository
 
 data class PhotoDetailUiState(
     val photoDetail: PhotoDetail? = null,
@@ -20,8 +22,9 @@ data class PhotoDetailUiState(
 )
 
 class PhotoDetailViewModel(
-    private val photoId: String,
+    private val photo: Photo,
     private val getPhotoDetail: GetPhotoDetailUseCase,
+    private val favoriteRepository: FavoriteRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PhotoDetailUiState())
@@ -29,13 +32,16 @@ class PhotoDetailViewModel(
 
     init {
         load()
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLiked = favoriteRepository.isFavorite(photo.id)) }
+        }
     }
 
     fun load() {
         if (_uiState.value.isLoading) return
         _uiState.update { it.copy(isLoading = true, error = null) }
         viewModelScope.launch {
-            getPhotoDetail(photoId)
+            getPhotoDetail(photo.id)
                 .onSuccess { photoDetail ->
                     _uiState.update {
                         it.copy(
@@ -57,7 +63,11 @@ class PhotoDetailViewModel(
     }
 
     fun toggleLike() {
-        // todo db 추가 후 구현
+        viewModelScope.launch {
+            favoriteRepository.toggleFavorite(photo)
+                .onSuccess { _uiState.update { it.copy(isLiked = favoriteRepository.isFavorite(photo.id)) } }
+                .onFailure { _uiState.update { it.copy(error = "좋아요 저장 실패") } }
+        }
     }
 
     fun isPhotoExifDraw(exif: PhotoExif?): Boolean {
