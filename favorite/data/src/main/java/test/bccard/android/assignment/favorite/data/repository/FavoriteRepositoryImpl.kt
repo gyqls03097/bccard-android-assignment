@@ -48,23 +48,24 @@ class FavoriteRepositoryImpl(
         return runCatching { dao.exists(photoId) }.getOrNull() ?: false
     }
 
-    override suspend fun toggleFavorite(photo: Photo): Result<Boolean> = runCatching {
+    override suspend fun removeFavorite(photo: Photo): Result<Boolean> = runCatching {
         if (dao.exists(photo.id)) {
             dao.deleteImage(photo.id)
             dao.delete(photo.id)
             true
         } else {
-            val url = photo.url
-            if (url == null) {
-                false
-            } else {
-                dao.update(photo.toEntity())
-                val bytes = onImageDownload(url)
-                if (bytes.isNotEmpty()) {
-                    dao.updateImage(FavoriteImageEntity(photoId = photo.id, bytes = bytes))
-                }
-                true
-            }
+            false
+        }
+    }
+
+    override suspend fun addFavorite(photo: Photo, photoImageUrl: String): Result<Boolean> = runCatching {
+        val bytes: ByteArray = onImageDownload(photoImageUrl)
+        if (bytes.isNotEmpty()) {
+            dao.update(photo.toEntity())
+            dao.updateImage(FavoriteImageEntity(photoId = photo.id, bytes = bytes))
+            true
+        } else {
+            false
         }
     }
 

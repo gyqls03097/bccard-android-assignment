@@ -13,6 +13,7 @@ import test.bccard.android.assignment.domain.usecase.GetPhotoDetailUseCase
 import test.bccard.android.assignment.domain.usecase.GetPhotosUseCase
 import test.bccard.android.assignment.favorite.data.repository.FavoriteRepositoryImpl
 import test.bccard.android.assignment.favorite.domain.repository.FavoriteRepository
+import test.bccard.android.assignment.favorite.domain.usecase.FavoriteToggleUseCase
 
 class AppDI(context: Context) {
 
@@ -32,4 +33,8 @@ class AppDI(context: Context) {
 
     val downloadPhoto = DownloadPhotoUseCase(photoRepository, urlDownloader)
 
+    val favoriteToggleUseCase = FavoriteToggleUseCase(
+        repository = favoriteRepository,
+        getDownloadUrl = { photoId -> photoRepository.getDownloadUrl(photoId).getOrNull() }
+    )
 }

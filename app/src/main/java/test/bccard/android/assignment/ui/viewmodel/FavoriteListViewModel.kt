@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import test.bccard.android.assignment.core.domain.model.Photo
 import test.bccard.android.assignment.favorite.domain.model.FavoritePhoto
 import test.bccard.android.assignment.favorite.domain.repository.FavoriteRepository
+import test.bccard.android.assignment.favorite.domain.usecase.FavoriteToggleUseCase
 
 data class FavoriteListUiState(
     val favorites: List<FavoritePhoto> = emptyList(),
@@ -19,6 +20,7 @@ data class FavoriteListUiState(
 
 class FavoriteListViewModel(
     private val favoriteRepository: FavoriteRepository,
+    private val favoriteToggleUseCase: FavoriteToggleUseCase
 ) : ViewModel() {
 
     private val errorMessage = MutableStateFlow("")
@@ -35,7 +37,7 @@ class FavoriteListViewModel(
     )
 
     fun toggleLike(photo: Photo) {
-        viewModelScope.launch { favoriteRepository.toggleFavorite(photo) }
+        viewModelScope.launch { favoriteToggleUseCase(photo) }
     }
 
     suspend fun dbImage(photo: Photo): ByteArray? {

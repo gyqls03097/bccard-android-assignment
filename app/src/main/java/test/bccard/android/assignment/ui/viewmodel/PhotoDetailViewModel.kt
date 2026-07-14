@@ -14,6 +14,7 @@ import test.bccard.android.assignment.domain.model.PhotoLocation
 import test.bccard.android.assignment.domain.usecase.DownloadPhotoUseCase
 import test.bccard.android.assignment.domain.usecase.GetPhotoDetailUseCase
 import test.bccard.android.assignment.favorite.domain.repository.FavoriteRepository
+import test.bccard.android.assignment.favorite.domain.usecase.FavoriteToggleUseCase
 
 data class PhotoDetailUiState(
     val photoDetail: PhotoDetail? = null,
@@ -26,6 +27,7 @@ class PhotoDetailViewModel(
     private val photo: Photo,
     private val getPhotoDetail: GetPhotoDetailUseCase,
     private val downloadPhoto: DownloadPhotoUseCase,
+    private val toggleUseCase: FavoriteToggleUseCase,
     private val favoriteRepository: FavoriteRepository,
 ) : ViewModel() {
 
@@ -73,7 +75,7 @@ class PhotoDetailViewModel(
 
     fun toggleLike() {
         viewModelScope.launch {
-            favoriteRepository.toggleFavorite(photo)
+            toggleUseCase(photo)
                 .onSuccess { _uiState.update { it.copy(isLiked = favoriteRepository.isFavorite(photo.id)) } }
                 .onFailure { _uiState.update { it.copy(error = "좋아요 저장 실패") } }
         }

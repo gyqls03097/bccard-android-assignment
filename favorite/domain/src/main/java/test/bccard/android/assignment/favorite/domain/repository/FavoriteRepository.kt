@@ -12,7 +12,9 @@ interface FavoriteRepository {
 
     suspend fun isFavorite(photoId: String): Boolean
 
-    suspend fun toggleFavorite(photo: Photo): Result<Boolean>
+    suspend fun removeFavorite(photo: Photo): Result<Boolean>
+
+    suspend fun addFavorite(photo: Photo, photoImageUrl: String): Result<Boolean>
 
     suspend fun getImage(photoId: String): ByteArray?
 }

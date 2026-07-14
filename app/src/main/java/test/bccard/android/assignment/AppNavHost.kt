@@ -123,6 +123,7 @@ fun AppNavHost(
             val viewModel: PhotoListViewModel = viewModel {
                 PhotoListViewModel(
                     getPhotos = di.getPhotos,
+                    toggleUseCase = di.favoriteToggleUseCase,
                     favoriteRepository = di.favoriteRepository,
                 )
             }
@@ -135,7 +136,10 @@ fun AppNavHost(
 
         composable<Screen.FavoriteList> {
             val viewModel: FavoriteListViewModel = viewModel {
-                FavoriteListViewModel(favoriteRepository = di.favoriteRepository)
+                FavoriteListViewModel(
+                    favoriteRepository = di.favoriteRepository,
+                    favoriteToggleUseCase = di.favoriteToggleUseCase
+                )
             }
             FavoriteListScreen(
                 viewModel = viewModel,
@@ -151,6 +155,7 @@ fun AppNavHost(
                     photo = route.toPhoto(),
                     getPhotoDetail = di.getPhotoDetail,
                     downloadPhoto = di.downloadPhoto,
+                    toggleUseCase = di.favoriteToggleUseCase,
                     favoriteRepository = di.favoriteRepository,
                 )
             }

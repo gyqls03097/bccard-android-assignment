@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import test.bccard.android.assignment.core.domain.model.Photo
 import test.bccard.android.assignment.domain.usecase.GetPhotosUseCase
 import test.bccard.android.assignment.favorite.domain.repository.FavoriteRepository
+import test.bccard.android.assignment.favorite.domain.usecase.FavoriteToggleUseCase
 
 data class PhotoListUiState(
     val photos: List<Photo> = emptyList(),
@@ -21,6 +22,7 @@ data class PhotoListUiState(
 
 class PhotoListViewModel(
     private val getPhotos: GetPhotosUseCase,
+    private val toggleUseCase: FavoriteToggleUseCase,
     private val favoriteRepository: FavoriteRepository,
 ) : ViewModel() {
 
@@ -84,7 +86,7 @@ class PhotoListViewModel(
 
     fun toggleLike(photo: Photo) {
         viewModelScope.launch {
-            favoriteRepository.toggleFavorite(photo)
+            toggleUseCase(photo)
         }
     }
 }
