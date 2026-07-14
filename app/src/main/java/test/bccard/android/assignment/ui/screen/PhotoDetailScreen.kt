@@ -41,6 +41,7 @@ import test.bccard.android.assignment.core.domain.model.PhotoUser
 import test.bccard.android.assignment.domain.model.PhotoDetail
 import test.bccard.android.assignment.domain.model.PhotoExif
 import test.bccard.android.assignment.domain.model.PhotoLocation
+import test.bccard.android.assignment.ui.composables.ProfileImage
 import test.bccard.android.assignment.ui.viewmodel.PhotoDetailViewModel
 
 
@@ -87,7 +88,9 @@ private fun PhotoDetailScreenContent(
 ) {
 
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.White),
     ) {
         Row(
             modifier = Modifier
@@ -272,10 +275,10 @@ private fun PhotoTitleItem(title: String) {
                 .align(Alignment.TopCenter)
         )
         Text(
-            modifier = Modifier.padding(top = 20.dp, start = 20.dp),
+            modifier = Modifier.padding(top = 20.dp, start = 20.dp, bottom = 8.dp),
             text = title,
-            fontSize = 12.sp,
-            color = Color.LightGray,
+            fontSize = 14.sp,
+            color = Color.Gray,
             fontWeight = FontWeight(600)
         )
     }
@@ -292,7 +295,7 @@ private fun PhotoBodyItem(title: String, text: String) {
             fontWeight = FontWeight(600)
         )
         Text(
-            modifier = Modifier.padding(top = 8.dp, start = 8.dp),
+            modifier = Modifier.padding(top = 8.dp, start = 20.dp),
             text = text,
             fontSize = 14.sp,
             color = Color.Black,
@@ -309,37 +312,7 @@ private fun PhotoUserItem(
             .fillMaxWidth()
             .padding(20.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .clip(RoundedCornerShape(20.dp)),
-        ) {
-            val profileImageUrl = user.profileImageUrl
-            if (profileImageUrl == null) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.LightGray)
-                )
-            } else {
-                SubcomposeAsyncImage(
-                    model = profileImageUrl.takeIf { it.isNotBlank() },
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.LightGray),
-                    contentScale = ContentScale.Crop,
-                    loading = {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            CircularProgressIndicator()
-                        }
-                    },
-                )
-            }
-        }
+        ProfileImage(user.profileImageUrl)
         val name = user.name ?: user.username ?: "(이름없음)"
         Text(
             modifier = Modifier.padding(top = 8.dp, start = 12.dp),

@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,6 +41,7 @@ import test.bccard.android.assignment.R
 import test.bccard.android.assignment.core.domain.model.Photo
 import test.bccard.android.assignment.core.domain.model.PhotoUser
 import test.bccard.android.assignment.favorite.domain.model.FavoritePhoto
+import test.bccard.android.assignment.ui.composables.ProfileImage
 import test.bccard.android.assignment.ui.viewmodel.FavoriteListViewModel
 
 
@@ -74,43 +76,43 @@ private fun FavoriteListScreenContent(
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
         ) {
             IconButton(
                 modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 20.dp),
+                    .align(Alignment.CenterVertically)
+                    .padding(start = 8.dp),
                 onClick = onBackClick
             ) {
                 Icon(
                     painter = painterResource(R.drawable.icon_back),
-                    modifier = Modifier.align(Alignment.Center),
                     contentDescription = null,
                     tint = Color.Black
                 )
             }
             Text(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(top = 20.dp, bottom = 20.dp),
+                    .weight(1.0f)
+                    .padding(start = 8.dp, top = 20.dp, bottom = 20.dp),
                 text = "Favorites",
                 fontSize = 20.sp
             )
-            Box(
-                modifier = Modifier
-                    .height(1.dp)
-                    .fillMaxWidth()
-                    .background(Color.LightGray)
-                    .align(Alignment.BottomCenter)
-            )
         }
+        Box(
+            modifier = Modifier
+                .height(1.dp)
+                .fillMaxWidth()
+                .background(Color.LightGray)
+        )
 
         if (favorites.isEmpty()) {
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1.0f),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
@@ -122,7 +124,7 @@ private fun FavoriteListScreenContent(
         } else {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .weight(1.0f)
                     .background(Color(0xfff5f5f5)),
                 contentPadding = PaddingValues(12.dp),
             ) {
@@ -157,6 +159,7 @@ private fun FavoriteListItem(
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .background(Color.White)
             .clip(RoundedCornerShape(12.dp))
             .clickable(onClick = onClick),
     ) {
@@ -181,16 +184,32 @@ private fun FavoriteListItem(
                     )
                 },
             )
-            Text(
+            Row(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
-                    .padding(start = 12.dp, bottom = 12.dp),
-                text = photo.user?.name ?: photo.id,
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+                    .padding(all = 8.dp)
+                    .background(
+                        color = Color(0x77000000),
+                        shape = RoundedCornerShape(20.dp)
+                    )
+                    .padding(all = 8.dp)
+            ) {
+                ProfileImage(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    profileImageUrl = photo.user?.profileImageUrl,
+                    size = 20.dp
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .align(Alignment.CenterVertically),
+                    text = photo.user?.name ?: photo.id,
+                    fontSize = 14.sp,
+                    color = Color.White,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
             IconButton(
                 modifier = Modifier.align(Alignment.TopEnd),
                 onClick = onToggleLike,
