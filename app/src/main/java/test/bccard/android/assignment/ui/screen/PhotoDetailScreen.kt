@@ -275,10 +275,10 @@ private fun PhotoTitleItem(title: String) {
                 .align(Alignment.TopCenter)
         )
         Text(
-            modifier = Modifier.padding(top = 20.dp, start = 20.dp),
+            modifier = Modifier.padding(top = 20.dp, start = 20.dp, bottom = 8.dp),
             text = title,
-            fontSize = 12.sp,
-            color = Color.LightGray,
+            fontSize = 14.sp,
+            color = Color.Gray,
             fontWeight = FontWeight(600)
         )
     }
@@ -295,7 +295,7 @@ private fun PhotoBodyItem(title: String, text: String) {
             fontWeight = FontWeight(600)
         )
         Text(
-            modifier = Modifier.padding(top = 8.dp, start = 8.dp),
+            modifier = Modifier.padding(top = 8.dp, start = 20.dp),
             text = text,
             fontSize = 14.sp,
             color = Color.Black,
