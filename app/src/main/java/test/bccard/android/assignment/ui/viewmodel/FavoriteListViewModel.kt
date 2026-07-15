@@ -16,6 +16,7 @@ import test.bccard.android.assignment.favorite.domain.usecase.FavoriteToggleUseC
 data class FavoriteListUiState(
     val favorites: List<FavoritePhoto> = emptyList(),
     val error: String = "",
+    val isToggling: Boolean = false,
 )
 
 class FavoriteListViewModel(
@@ -25,19 +26,27 @@ class FavoriteListViewModel(
 
     private val errorMessage = MutableStateFlow("")
 
+    private val isToggling = MutableStateFlow(false)
+
     val uiState: StateFlow<FavoriteListUiState> = combine(
         flow = favoriteRepository.findAll(),
         flow2 = errorMessage,
-    ) { favorites, error ->
-        FavoriteListUiState(favorites, error)
+        flow3 = isToggling,
+    ) { favorites, error, toggling ->
+        FavoriteListUiState(favorites, error, toggling)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = FavoriteListUiState(),
     )
 
-    fun toggleLike(photo: Photo) {
-        viewModelScope.launch { favoriteToggleUseCase(photo) }
+    fun toggleFavorite(photo: Photo) {
+        if (isToggling.value) return
+        isToggling.value = true
+        viewModelScope.launch {
+            favoriteToggleUseCase(photo)
+            isToggling.value = false
+        }
     }
 
     suspend fun dbImage(photo: Photo): ByteArray? {

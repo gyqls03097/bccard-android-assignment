@@ -42,6 +42,7 @@ import test.bccard.android.assignment.domain.model.PhotoDetail
 import test.bccard.android.assignment.domain.model.PhotoExif
 import test.bccard.android.assignment.domain.model.PhotoLocation
 import test.bccard.android.assignment.ui.composables.ProfileImage
+import test.bccard.android.assignment.ui.dialog.ProgressDialog
 import test.bccard.android.assignment.ui.viewmodel.PhotoDetailViewModel
 
 
@@ -55,6 +56,10 @@ fun PhotoDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    if (uiState.isToggling) {
+        ProgressDialog()
+    }
+
     PhotoDetailScreenContent(
         photo = photo,
         photoDetail = uiState.photoDetail,
@@ -66,7 +71,7 @@ fun PhotoDetailScreen(
         isExifDraw = viewModel::isPhotoExifDraw,
         onPhotoClick = { photo.urlDetail?.let { url -> onPhotoClick(url) } },
         onBackClick = onBackClick,
-        onLikeClick = viewModel::toggleLike,
+        onLikeClick = viewModel::toggleFavorite,
         onDownloadClick = viewModel::download,
     )
 }

@@ -19,6 +19,7 @@ import test.bccard.android.assignment.favorite.domain.usecase.FavoriteToggleUseC
 data class PhotoDetailUiState(
     val photoDetail: PhotoDetail? = null,
     val isLiked: Boolean = false,
+    val isToggling: Boolean = false,
     val isLoading: Boolean = false,
     val error: String? = null,
 )
@@ -73,11 +74,14 @@ class PhotoDetailViewModel(
         }
     }
 
-    fun toggleLike() {
+    fun toggleFavorite() {
+        if (_uiState.value.isToggling) return
+        _uiState.update { it.copy(isToggling = true) }
         viewModelScope.launch {
             toggleUseCase(photo)
                 .onSuccess { _uiState.update { it.copy(isLiked = favoriteRepository.isFavorite(photo.id)) } }
                 .onFailure { _uiState.update { it.copy(error = "좋아요 저장 실패") } }
+            _uiState.update { it.copy(isToggling = false) }
         }
     }
 

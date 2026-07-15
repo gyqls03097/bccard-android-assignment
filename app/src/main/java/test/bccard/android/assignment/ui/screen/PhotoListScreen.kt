@@ -48,6 +48,7 @@ import test.bccard.android.assignment.core.domain.model.Photo
 import test.bccard.android.assignment.core.domain.model.PhotoUser
 import test.bccard.android.assignment.ui.composables.ProfileImage
 import test.bccard.android.assignment.ui.dialog.DialogButton
+import test.bccard.android.assignment.ui.dialog.ProgressDialog
 import test.bccard.android.assignment.ui.dialog.SimpleDialog
 import test.bccard.android.assignment.ui.viewmodel.PhotoListViewModel
 
@@ -62,6 +63,10 @@ fun PhotoListScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    if (uiState.isToggling) {
+        ProgressDialog()
+    }
+
     PhotoListScreenContent(
         photos = uiState.photos,
         modifier = modifier,
@@ -69,7 +74,7 @@ fun PhotoListScreen(
         error = uiState.error,
         isLikeId = { id -> uiState.likedIds.contains(id) },
         onPhotoClick = onPhotoClick,
-        onToggleLike = viewModel::toggleLike,
+        onToggleLike = viewModel::toggleFavorite,
         onLikedListClick = onLikedListClick,
         onLogoutClick = onLogoutClick,
         onLoadMore = viewModel::loadNextPage,
@@ -147,7 +152,7 @@ private fun PhotoListScreenContent(
                 Icon(
                     painter = painterResource(R.drawable.icon_logout),
                     contentDescription = null,
-                    tint = Color.Gray
+                    tint = Color.Black
                 )
             }
             IconButton(
