@@ -141,6 +141,12 @@ fun AppNavHost(
                 viewModel = viewModel,
                 onPhotoClick = { photo -> navController.navigate(Screen.PhotoDetail.create(photo)) },
                 onLikedListClick = { navController.navigate(Screen.FavoriteList) },
+                onLogoutClick = {
+                    di.pref.accessKey = ""
+                    navController.navigate(Screen.AccessKey) {
+                        popUpTo<Screen.PhotoList> { inclusive = true }
+                    }
+                },
             )
         }
 
