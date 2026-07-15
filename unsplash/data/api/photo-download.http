@@ -1,0 +1,2 @@
+GET https://api.unsplash.com/photos/txZv4HQJRpE/download
+Authorization: Client-ID {{accessKey}}

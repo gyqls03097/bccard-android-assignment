@@ -1,0 +1,108 @@
+package test.bccard.android.assignment.ui.viewmodel
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import test.bccard.android.assignment.core.domain.model.Photo
+import test.bccard.android.assignment.domain.model.PhotoDetail
+import test.bccard.android.assignment.domain.model.PhotoExif
+import test.bccard.android.assignment.domain.model.PhotoLocation
+import test.bccard.android.assignment.domain.usecase.DownloadPhotoUseCase
+import test.bccard.android.assignment.domain.usecase.GetPhotoDetailUseCase
+import test.bccard.android.assignment.favorite.domain.repository.FavoriteRepository
+import test.bccard.android.assignment.favorite.domain.usecase.FavoriteToggleUseCase
+
+data class PhotoDetailUiState(
+    val photoDetail: PhotoDetail? = null,
+    val isLiked: Boolean = false,
+    val isToggling: Boolean = false,
+    val isLoading: Boolean = false,
+    val error: String? = null,
+)
+
+class PhotoDetailViewModel(
+    private val photo: Photo,
+    private val getPhotoDetail: GetPhotoDetailUseCase,
+    private val downloadPhoto: DownloadPhotoUseCase,
+    private val toggleUseCase: FavoriteToggleUseCase,
+    private val favoriteRepository: FavoriteRepository,
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(PhotoDetailUiState())
+    val uiState: StateFlow<PhotoDetailUiState> = _uiState.asStateFlow()
+
+    init {
+        load()
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLiked = favoriteRepository.isFavorite(photo.id)) }
+        }
+    }
+
+    fun load() {
+        if (_uiState.value.isLoading) return
+        _uiState.update { it.copy(isLoading = true, error = null) }
+        viewModelScope.launch {
+            getPhotoDetail(photo.id)
+                .onSuccess { photoDetail ->
+                    _uiState.update {
+                        it.copy(
+                            photoDetail = photoDetail,
+                            isLoading = false,
+                            error = null,
+                        )
+                    }
+                }
+                .onFailure { throwable ->
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            error = throwable.message ?: "사진을 불러오지 못했습니다.",
+                        )
+                    }
+                }
+        }
+    }
+
+    fun download() {
+        viewModelScope.launch {
+            downloadPhoto(photo.id)
+                .onFailure { _uiState.update { it.copy(error = "다운로드 요청 실패") } }
+        }
+    }
+
+    fun toggleFavorite() {
+        if (_uiState.value.isToggling) return
+        _uiState.update { it.copy(isToggling = true) }
+        viewModelScope.launch {
+            toggleUseCase(photo)
+                .onSuccess { _uiState.update { it.copy(isLiked = favoriteRepository.isFavorite(photo.id)) } }
+                .onFailure { _uiState.update { it.copy(error = "좋아요 저장 실패") } }
+            _uiState.update { it.copy(isToggling = false) }
+        }
+    }
+
+    fun isPhotoExifDraw(exif: PhotoExif?): Boolean {
+        if (exif?.make != null) return true
+        if (exif?.model != null) return true
+        if (exif?.name != null) return true
+        if (exif?.exposureTime != null) return true
+        if (exif?.aperture != null) return true
+        if (exif?.focalLength != null) return true
+        if (exif?.iso != null) return true
+        return false
+    }
+
+    fun isPhotoLocationDraw(location: PhotoLocation?): Boolean {
+        if (location?.name != null) return true
+        if (location?.city != null) return true
+        if (location?.country != null) return true
+        val lat = location?.latitude
+        if (lat != null && lat > 1) return true
+        val long = location?.longitude
+        return long != null && long > 1
+    }
+}
