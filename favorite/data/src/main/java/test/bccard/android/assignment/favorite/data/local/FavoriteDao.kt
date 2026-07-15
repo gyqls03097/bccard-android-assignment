@@ -21,18 +21,9 @@ interface FavoriteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(entity: FavoriteEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateImage(entity: FavoriteImageEntity)
-
     @Query("DELETE FROM favorite WHERE id = :photoId")
     suspend fun delete(photoId: String)
 
-    @Query("DELETE FROM favorite_image WHERE photoId = :photoId")
-    suspend fun deleteImage(photoId: String)
-
     @Query("SELECT * FROM favorite WHERE id = :photoId")
     suspend fun findById(photoId: String): FavoriteEntity?
-
-    @Query("SELECT bytes FROM favorite_image WHERE photoId = :photoId")
-    suspend fun findImageById(photoId: String): ByteArray?
 }
