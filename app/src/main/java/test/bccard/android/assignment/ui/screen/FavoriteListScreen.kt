@@ -42,6 +42,7 @@ import test.bccard.android.assignment.core.domain.model.Photo
 import test.bccard.android.assignment.core.domain.model.PhotoUser
 import test.bccard.android.assignment.favorite.domain.model.FavoritePhoto
 import test.bccard.android.assignment.ui.composables.ProfileImage
+import test.bccard.android.assignment.ui.dialog.ProgressDialog
 import test.bccard.android.assignment.ui.viewmodel.FavoriteListViewModel
 
 
@@ -54,12 +55,16 @@ fun FavoriteListScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    if (uiState.isToggling) {
+        ProgressDialog()
+    }
+
     FavoriteListScreenContent(
         favorites = uiState.favorites,
         modifier = modifier,
         dbImage = viewModel::dbImage,
         onPhotoClick = onPhotoClick,
-        onToggleLike = viewModel::toggleLike,
+        onToggleLike = viewModel::toggleFavorite,
         onBackClick = onBackClick,
     )
 }
