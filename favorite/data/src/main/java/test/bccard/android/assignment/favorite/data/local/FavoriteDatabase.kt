@@ -8,7 +8,6 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [
         FavoriteEntity::class,
-        FavoriteImageEntity::class
     ],
     version = 1,
     exportSchema = false,
