@@ -3,6 +3,7 @@ package test.bccard.android.assignment.ui.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,9 +20,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import me.saket.telephoto.zoomable.coil3.ZoomableAsyncImage
 import me.saket.telephoto.zoomable.rememberZoomableImageState
 import test.bccard.android.assignment.R
+import test.bccard.android.assignment.ui.theme.StatusBarIconToLight
 
 
 @Composable
@@ -29,6 +33,8 @@ fun PhotoExpandScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
 ) {
+    StatusBarIconToLight()
+
     PhotoExpandScreenContent(
         url = url,
         modifier = modifier,
@@ -48,14 +54,14 @@ private fun PhotoExpandScreenContent(
             .fillMaxSize()
             .background(Color.Black),
     ) {
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
         ) {
             IconButton(
                 modifier = Modifier
-                    .align(Alignment.CenterStart)
+                    .align(Alignment.CenterVertically)
                     .padding(start = 8.dp),
                 onClick = onBackClick
             ) {
@@ -65,14 +71,21 @@ private fun PhotoExpandScreenContent(
                     tint = Color.White
                 )
             }
-            Box(
+            Text(
                 modifier = Modifier
-                    .height(1.dp)
-                    .fillMaxWidth()
-                    .background(Color.LightGray)
-                    .align(Alignment.BottomCenter)
+                    .weight(1.0f)
+                    .padding(start = 8.dp, top = 20.dp, bottom = 20.dp),
+                text = "Photo Expand",
+                color = Color.White,
+                fontSize = 20.sp
             )
         }
+        Box(
+            modifier = Modifier
+                .height(1.dp)
+                .fillMaxWidth()
+                .background(Color.DarkGray)
+        )
 
         val imageState = rememberZoomableImageState()
         Box(
