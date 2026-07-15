@@ -26,7 +26,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +47,8 @@ import test.bccard.android.assignment.R
 import test.bccard.android.assignment.core.domain.model.Photo
 import test.bccard.android.assignment.core.domain.model.PhotoUser
 import test.bccard.android.assignment.ui.composables.ProfileImage
+import test.bccard.android.assignment.ui.dialog.DialogButton
+import test.bccard.android.assignment.ui.dialog.SimpleDialog
 import test.bccard.android.assignment.ui.viewmodel.PhotoListViewModel
 
 
@@ -53,6 +58,7 @@ fun PhotoListScreen(
     modifier: Modifier = Modifier,
     onPhotoClick: (Photo) -> Unit = {},
     onLikedListClick: () -> Unit = {},
+    onLogoutClick: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -65,6 +71,7 @@ fun PhotoListScreen(
         onPhotoClick = onPhotoClick,
         onToggleLike = viewModel::toggleLike,
         onLikedListClick = onLikedListClick,
+        onLogoutClick = onLogoutClick,
         onLoadMore = viewModel::loadNextPage,
         onRetry = viewModel::retry,
     )
@@ -80,10 +87,26 @@ private fun PhotoListScreenContent(
     onPhotoClick: (Photo) -> Unit = {},
     onToggleLike: (Photo) -> Unit = {},
     onLikedListClick: () -> Unit = {},
+    onLogoutClick: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     onRetry: () -> Unit = {},
 ) {
     val listState = rememberLazyListState()
+    var showLogoutDialog by rememberSaveable { mutableStateOf(false) }
+
+    if (showLogoutDialog) {
+        SimpleDialog(
+            title = "로그아웃",
+            text = "정말 로그아웃 하시겠습니까?",
+            onConfirm = DialogButton("로그아웃") {
+                showLogoutDialog = false
+                onLogoutClick()
+            },
+            onDismiss = DialogButton("취소") {
+                showLogoutDialog = false
+            },
+        )
+    }
 
     // 스크롤이 마지막 아이템 근처에 있는가
     val shouldLoadMore by remember {
@@ -116,6 +139,17 @@ private fun PhotoListScreenContent(
                 text = "Unsplash Images",
                 fontSize = 20.sp
             )
+            IconButton(
+                modifier = Modifier
+                    .align(Alignment.CenterVertically),
+                onClick = { showLogoutDialog = true }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.icon_logout),
+                    contentDescription = null,
+                    tint = Color.Gray
+                )
+            }
             IconButton(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
